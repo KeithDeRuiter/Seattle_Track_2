@@ -4,6 +4,7 @@ import os, io, requests, zipfile
 #import itertools
 #import datetime
 import pandas as pd
+import datetime as dt
 #import seaborn as sns
 import numpy as np
 import matplotlib.pyplot as plt
@@ -19,6 +20,7 @@ def download_ais_data(year, month, zone, data_dir='./data'):
     '''function to download ais data from https://marinecadastre.gov/ais/ 
     and return corresponding pandas dataframe'''
     
+    print(data_dir)
     # create data directory
     if not os.path.exists(data_dir):
         os.makedirs(data_dir)
@@ -26,6 +28,8 @@ def download_ais_data(year, month, zone, data_dir='./data'):
     # create path to csv file
     csv_file = 'AIS_{}_{}_Zone{}.csv'.format(year, str(month).zfill(2), str(zone).zfill(2))
     csv_path = os.path.join(data_dir, 'AIS_ASCII_by_UTM_Month', str(year), csv_file)
+    print(csv_path)
+    print("C:\\Users\\Justin\\Documents\\GitHub\\Seattle_Track_2\\Submission\\data")
         
     try:
         # read csv if already downloaded
@@ -37,14 +41,29 @@ def download_ais_data(year, month, zone, data_dir='./data'):
                                                          str(month).zfill(2), 
                                                          str(zone).zfill(2)))
         # download and extract data
+        print("downloading file")
         r = requests.get(zip_file_url, stream=True)
         z = zipfile.ZipFile(io.BytesIO(r.content))
         z.extractall(data_dir)
 
         # load csv as dataframe
         data = pd.read_csv(csv_path)
+        
+    #Convert BaseDateTime to datetime
+    aisDateTime = pd.to_datetime(data.BaseDateTime, errors='raise')
+
+    #Subtract 1970 to convert to since epoch time
+    aisDateTime = aisDateTime - dt.datetime(1970,1,1)
+
+    #convert to seconds. All BasesDateTime should be seconds since epoch now
+    data.BaseDateTime = aisDateTime.dt.total_seconds()
 
     return data
 
 df = download_ais_data(2017,6,11)
-df.head()
+
+
+
+
+
+
