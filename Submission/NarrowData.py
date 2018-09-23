@@ -21,11 +21,7 @@ def reduce_data(df):
     df = df[~df.SOG.isin(speed_less_than_0)]
     
 
-
-
     return df
-
-
 
 
 def four_hr_interval(df, start_time):
@@ -42,7 +38,3 @@ def four_hr_interval(df, start_time):
             
     
     return df
-
-
-#8,735,261 data points left after this
-# 121 unique ships that have weird -50 speed
