@@ -13,6 +13,8 @@ from pandas import errors
 import numpy as np
 import matplotlib.pyplot as plt
 from urllib import parse
+from datetime import datetime
+import calendar
 
 
 def _get_csv(filename):
@@ -55,6 +57,13 @@ def _extract_zip(filename, dir=p.Path.cwd()):
         return None
     return extracted_files
 
+
+def _epoch_to_iso8601(timestamp):
+    return datetime.fromtimestamp(timestamp).isoformat()
+
+
+def _iso8601_to_epoch(datestring):
+    return calendar.timegm(datetime.strptime(datestring, "%Y-%m-%dT%H:%M:%S").timetuple())
 
 def main():
     year = 2017
