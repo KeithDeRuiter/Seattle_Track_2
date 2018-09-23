@@ -47,7 +47,7 @@ def download_ais_data(year, month, zone, data_dir='./data'):
         # load csv as dataframe
         data = pd.read_csv(csv_path)
     
-    data = timeToMinFromEpoch(data)  
+    data = timeToSecFromEpoch(data)  
 
         
 
