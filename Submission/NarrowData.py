@@ -6,6 +6,10 @@ Created on Sat Sep 22 13:22:35 2018
 @author: janey
 """
 
+import convertLatLon2UTM
+import pandas as pd
+
+
 def reduce_data(df):
     
     #remove all of the tug boat types from df
@@ -24,6 +28,8 @@ def reduce_data(df):
     return df
 
 
+#start = 1496275200.0
+
 def four_hr_interval(input_frame, start_time):
     
     end_time = start_time + (4.0 * 60 * 60)
@@ -38,3 +44,54 @@ def four_hr_interval(input_frame, start_time):
             
     
     return input_frame
+
+
+
+
+
+#interval is time in minutes
+    
+
+def get_interval_subset(input_frame, interval):
+    start_time = input_frame.BaseDateTime.min()
+    end_time = start_time + (interval * 60.0)
+    BDT_max = input_frame.BaseDateTime.max()
+    
+    baseDateTime_subsetList = []
+    df_intervalSubset_list = []
+    
+    while end_time <= BDT_max:
+        baseDateTime_subsetList = input_frame[(input_frame['BaseDateTime']>= start_time) & (input_frame['BaseDateTime'] < end_time)]
+        
+        input_frame = input_frame[~input_frame.BaseDateTime.isin(baseDateTime_subsetList)]
+        df_intervalSubset_list.append(input_frame)
+        
+        start_time = end_time
+        end_time = start_time + (interval * 60.0)
+        
+    
+    return df_intervalSubset_list
+
+
+
+
+def mean_data_point(input_frame_list):
+    
+    
+    mean_data_frame_list = []
+    
+    for data_frame in input_frame_list:
+        #data_frame = convertLatLon2UTM(data_frame)
+        output = pd.DataFrame({'MMSI': [], 'LAT': [], 'LON': []})
+        for mmsi in data_frame['MMSI'].unique():
+            ship_reports = data_frame[data_frame.MMSI == mmsi]
+            lat_mean = ship_reports['LAT'].mean()
+            lon_mean = ship_reports['LON'].mean()
+            
+            new = pd.DataFrame({'MMSI': [mmsi], 'LAT': [lat_mean], 'LON': [lon_mean]})
+            output = pd.concat([output, new])
+        
+        mean_data_frame_list.append(output)
+    
+    
+    return mean_data_frame_list

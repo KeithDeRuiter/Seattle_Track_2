@@ -13,6 +13,11 @@ from NarrowData import reduce_data
 #Read in all data
 df_full = download_ais_data(2017,6,11)
 
+
+#Change time to secs
+
+df = timeToSecFromEpoch(df_full)
+
 #Filter data by coarse criteria
 df = reduce_data(df_full)
 
