@@ -33,6 +33,7 @@ def download_ais_data(year, month, zone, data_dir='./data'):
         # read csv if already downloaded
         data = pd.read_csv(csv_path)
     except:
+        print("Couldn't find existing dataset.")
         # create zip file url
         zip_file_url = ('https://coast.noaa.gov/htdata/CMSP/AISDataHandler/'
                         '{}/AIS_{}_{}_Zone{}.zip'.format(year, year, 
@@ -46,22 +47,15 @@ def download_ais_data(year, month, zone, data_dir='./data'):
 
         # load csv as dataframe
         data = pd.read_csv(csv_path)
-    
-    data = timeToSecFromEpoch(data)  
-
-        
 
     return data
 
 
 def timeToSecFromEpoch(dataframe):
-    print(type(dataframe))
     #Convert BaseDateTime to datetime
     dataframe.BaseDateTime = pd.to_datetime(dataframe.BaseDateTime, errors='raise') 
-    print(type(dataframe))
     dataframe['date'] = dataframe.BaseDateTime.apply(lambda x: x.date())
     
-
     #Subtract 1970 to convert to since epoch time
     dataframe.BaseDateTime = dataframe.BaseDateTime - dt.datetime(1970,1,1)
 
@@ -70,19 +64,12 @@ def timeToSecFromEpoch(dataframe):
     
     return dataframe
 
-def createLatLongDatePlot(dataframe):
-    
-#    for i in sorted(df.date.unique())[:2]: #looking at 2 days (one at a time)
-#    day_df = df[df.date==i]
-#    sns.pairplot(x_vars=["LON"], y_vars=["LAT"], data=day_df,  hue="VesselType", size=6, plot_kws={'alpha':0.1})
-#    plt.title("LAT/LONG positions, colored by VesselType ("+str(day_df.date.values[0])+")")
-#    plt.show()
-    
+def createLatLongDatePlot(dataframe):   
     sns.pairplot(x_vars=["LON"], y_vars=["LAT"], data=dataframe,  hue="BaseDateTime", size=6, plot_kws={'alpha':0.1})
     plt.title("LAT/LONG positions, colored by BaseDateTime ("+str(dataframe.BaseDateTime.values[0])+")")
     plt.show()
 
-ultraDf = download_ais_data(2017,6,11)
+#ultraDf = download_ais_data(2017,6,11)
 
 
 
