@@ -24,6 +24,17 @@ def reduce_data(df):
     return df
 
 
-
-#8,735,261 data points left after this
-# 121 unique ships that have weird -50 speed
+def four_hr_interval(df, start_time):
+    
+    end_time = start_time + (4.0 * 60 * 60)
+    four_hour_data = []
+    
+    for i in df.ix[:, 'BaseDateTime']:
+        if i < start_time or i > end_time:
+            four_hour_data.append(i)
+        
+    
+    df = df[~df.BaseDateTime.isin(four_hour_data)]
+            
+    
+    return df
