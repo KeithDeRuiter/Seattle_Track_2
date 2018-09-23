@@ -6,9 +6,8 @@ Created on Sat Sep 22 19:49:33 2018
 @author: keith
 """
 
-import DownloadAIS
-import NarrowData
-
+from DownloadAIS import download_ais_data
+from NarrowData import reduce_data
 
 
 #Read in all data
