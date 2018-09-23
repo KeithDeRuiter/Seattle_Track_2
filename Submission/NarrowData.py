@@ -6,7 +6,6 @@ Created on Sat Sep 22 13:22:35 2018
 @author: janey
 """
 
-import convertLatLon2UTM
 import pandas as pd
 
 

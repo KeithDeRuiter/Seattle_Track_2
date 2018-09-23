@@ -53,5 +53,5 @@ def cluster(df):
     
     sns.pairplot(x_vars=["LON"], y_vars=["LAT"], data=df_XYZ_subset,  hue="label", 
                  size=8, plot_kws={'alpha':0.25})
-    plt.title("LAT/LONG positions of the vessels, colored by VesselType (All data)")
+    plt.title("Clustered Data and Potential Interactions")
     plt.show()
