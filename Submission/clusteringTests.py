@@ -32,7 +32,7 @@ from scipy.spatial import KDTree
 from scipy import spatial
 
 tree = spatial.KDTree(df3)
-
+tree.query_ball_tree
 #how deep is the resulting r tree?
 #tree height = ceil(log(n-#of points)/log(fixed#ofchildren-eg 9)) 
 
@@ -41,7 +41,7 @@ from sklearn.cluster import KMeans
 # create np array for data points
 points = df3
 # create kmeans object
-kmeans = KMeans(n_clusters=4)
+kmeans = KMeans(n_clusters=4).fit(df3)
 # fit kmeans object to data
 kmeans.fit(points)
 # print location of clusters learned by kmeans object
