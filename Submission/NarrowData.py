@@ -24,17 +24,17 @@ def reduce_data(df):
     return df
 
 
-def four_hr_interval(df, start_time):
+def four_hr_interval(input_frame, start_time):
     
     end_time = start_time + (4.0 * 60 * 60)
     four_hour_data = []
     
-    for i in df.ix[:, 'BaseDateTime']:
+    for i in input_frame.ix[:, 'BaseDateTime']:
         if i < start_time or i > end_time:
             four_hour_data.append(i)
         
     
-    df = df[~df.BaseDateTime.isin(four_hour_data)]
+    input_frame = input_frame[~input_frame.BaseDateTime.isin(four_hour_data)]
             
     
-    return df
+    return input_frame
